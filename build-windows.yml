@@ -1,0 +1,22 @@
+name: Build OMR Windows EXE
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - run: pyinstaller --noconfirm --clean --windowed --name OMR-Examination-System app/main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OMR-Examination-System-Windows
+          path: dist/OMR-Examination-System.exe
